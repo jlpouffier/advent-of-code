@@ -46,17 +46,16 @@ with open('2024/2/input.txt', mode='r') as file:
         row = line.strip().split(' ')
         reports.append(Report(row))
 
+# Part1
 number_of_valid_reports = 0
 for report in reports:
     if report.is_valid():
         number_of_valid_reports += 1
-print("Number of valid reports")
 print(number_of_valid_reports)
 
-
+# Part2
 number_of_valid_reports_with_problem_dampener = 0
 for report in reports:
     if report.is_valid_with_problem_dampener():
         number_of_valid_reports_with_problem_dampener += 1
-print("Number of valid reports with problem dampener")
 print(number_of_valid_reports_with_problem_dampener)
