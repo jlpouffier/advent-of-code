@@ -1,3 +1,5 @@
+import time
+
 class Rule:
     def __init__(self, data):
         self.numbers = [int(number) for number in data.split('|')]
@@ -82,16 +84,26 @@ with open("2024/5/input.txt", mode="r") as file:
             updates.append(Update(line.strip('\n')))
 
 # Part 1
+part1_start_time = time.time()
 result1 = 0
 for update in updates:
     if update.is_valid_against_rules(rules):
         result1 += update.get_middle_number()
 print(result1)
 
+part1_end_time = time.time()
+part1_runtime = part1_end_time - part1_start_time
+print(f"Runtime: {part1_runtime:.6f} seconds")
+
 # Part 2
+part2_start_time = time.time()
 result2 = 0
 for update in updates:
     if not update.is_valid_against_rules(rules):
         update.reorder_update_against_rules(rules)
         result2 += update.get_middle_number()
 print(result2)
+
+part2_end_time = time.time()
+part2_runtime = part2_end_time - part2_start_time
+print(f"Runtime: {part2_runtime:.6f} seconds")

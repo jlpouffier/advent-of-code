@@ -1,5 +1,6 @@
 import re
 import math
+import time
 
 # Find all multiplications and sums them.
 def compute_memory(memory):
@@ -12,6 +13,7 @@ def compute_memory(memory):
     return sum_of_products
 
 # part 1
+part1_start_time = time.time()
 with open("2024/3/input.txt", mode="r") as file:
     memory = ""
     for line in file:
@@ -19,7 +21,12 @@ with open("2024/3/input.txt", mode="r") as file:
     result1 = compute_memory(memory)
 print(result1)
 
+part1_end_time = time.time()
+part1_runtime = part1_end_time - part1_start_time
+print(f"Runtime: {part1_runtime:.6f} seconds")
+
 # part 2
+part2_start_time = time.time()
 with open("2024/3/input.txt", mode="r") as file:
     memory = ""
     for line in file:
@@ -42,3 +49,7 @@ with open("2024/3/input.txt", mode="r") as file:
     for memory_part in enabled_memory_parts:
         result2 += compute_memory(memory_part)
 print(result2)
+
+part2_end_time = time.time()
+part2_runtime = part2_end_time - part2_start_time
+print(f"Runtime: {part2_runtime:.6f} seconds")

@@ -1,3 +1,5 @@
+import time
+
 class Report:
     def __init__(self, levels):
         self.levels = [int(level) for level in levels]
@@ -47,15 +49,25 @@ with open('2024/2/input.txt', mode='r') as file:
         reports.append(Report(row))
 
 # Part1
+part1_start_time = time.time()
 number_of_valid_reports = 0
 for report in reports:
     if report.is_valid():
         number_of_valid_reports += 1
 print(number_of_valid_reports)
 
+part1_end_time = time.time()
+part1_runtime = part1_end_time - part1_start_time
+print(f"Runtime: {part1_runtime:.6f} seconds")
+
 # Part2
+part2_start_time = time.time()
 number_of_valid_reports_with_problem_dampener = 0
 for report in reports:
     if report.is_valid_with_problem_dampener():
         number_of_valid_reports_with_problem_dampener += 1
 print(number_of_valid_reports_with_problem_dampener)
+
+part2_end_time = time.time()
+part2_runtime = part2_end_time - part2_start_time
+print(f"Runtime: {part2_runtime:.6f} seconds")

@@ -1,3 +1,5 @@
+import time
+
 class Grid:
     def __init__(self, width, height, values):
         self.width = width
@@ -60,6 +62,7 @@ class Grid:
         word_list = self.get_grid_words(length)
         return word_list.count(word)
 
+part1_start_time = time.time()
 values = []
 width = 0
 height = 0
@@ -71,3 +74,7 @@ with open("2024/4/input.txt", mode="r") as file:
         width = max(width,len(clean_line))
 grid = Grid(width, height, values)
 print(grid.count_all_occurences('XMAS'))
+
+part1_end_time = time.time()
+part1_runtime = part1_end_time - part1_start_time
+print(f"Runtime: {part1_runtime:.6f} seconds")

@@ -1,3 +1,5 @@
+import time
+
 class Grid:
     def __init__(self, width, height, values):
         self.width = width
@@ -49,6 +51,7 @@ class Grid:
                     count += 1
         return count
 
+part2_start_time = time.time()
 # Extract Grid
 grid_values = []
 grid_width = 0
@@ -86,3 +89,7 @@ matches += grid.count_subgrid_matching_mask(mask3)
 matches += grid.count_subgrid_matching_mask(mask4)
 
 print(matches)
+
+part2_end_time = time.time()
+part2_runtime = part2_end_time - part2_start_time
+print(f"Runtime: {part2_runtime:.6f} seconds")
