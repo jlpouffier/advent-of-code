@@ -18,6 +18,9 @@ west_chat = '<'
 class Guard:
     def __init__(self, x, y, orientation, grid_width, grid_height):
         if x < grid_width and y < grid_height:
+            self.init_x = x
+            self.init_y = y
+            self.init_orientation = orientation
             self.x = x
             self.y = y
             self.orientation = orientation
@@ -107,6 +110,21 @@ class Guard:
         else:
             return west_chat
 
+    def reset(self):
+        self.x = self.init_x
+        self.y = self.init_y
+        self.orientation = self.init_orientation
+        self.visited_places = [
+            {
+                'x': self.init_x,
+                'y': self.init_y,
+                'orientation': self.init_orientation
+            }
+        ]
+        self.is_in_a_loop = False
+        self.is_outside = False
+        
+
 class Grid:
     def __init__(self, width, height, values):
         self.width = width
@@ -115,25 +133,29 @@ class Grid:
             self.values = values
         else:
             raise ValueError("This grid is not coherent")
+        self.has_tmp_obstruction = False
+        self.tmp_obsctruction_x = 0
+        self.tmp_obsctruction_y = 0
     
     def get(self, x, y):
         if 0 <= x < self.width and 0 <= y < self.height:
-            return self.values[x + y * self.width]
+            if self.has_tmp_obstruction:
+                if x == self.tmp_obsctruction_x and y == self.tmp_obsctruction_y:
+                    return obstruction
+                else: 
+                    return self.values[x + y * self.width]
+            else:
+                return self.values[x + y * self.width]
         else:
             return outside
-    
-    def set(self, x, y, value):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            self.values[x + y * self.width] = value
-        else:
-            raise ValueError("Cannot change somerhing outside of the grid")
 
-    def add_obstruction(self, i, j):
-        new_grid = Grid(self.width, self.height, copy.deepcopy(self.values))
-        if new_grid.get(i,j) != obstruction:
-            new_grid.set(i,j,obstruction)
-        return new_grid
+    def activate_tmp_obsctrcution(self):
+        self.has_tmp_obstruction = True
 
+    def move_tmp_obsctrcution(self, x, y):
+        self.tmp_obsctruction_x = x
+        self.tmp_obsctruction_y = y
+                    
 def print_guard_on_grid(guard, grid):
  # Construct rows
     rows = []
@@ -189,14 +211,15 @@ part2_start_time = time.time()
 visited_position = guard.get_uniquely_visited_location()
 total_positions = len(visited_position)
 options = 0
+grid.activate_tmp_obsctrcution()
+guard.reset()
 for id, position in enumerate(visited_position):
     progress = (id + 1) / total_positions * 100 
-    grid = Grid(width, height, values)
-    guard = Guard(guard_x, guard_y, north, width, height)
     if grid.get(position[0],position[1]) == available_spot and (guard.x != position[0] or guard.y != position[1]) :
-        new_grid = grid.add_obstruction(position[0],position[1])
+        grid.move_tmp_obsctrcution(position[0],position[1])
+        guard.reset()
         while True:
-            guard.compute_step(new_grid)
+            guard.compute_step(grid)
             if guard.is_outside:
                 break
             if guard.is_in_a_loop:
