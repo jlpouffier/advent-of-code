@@ -3,11 +3,6 @@ import time
 
 outside= ' '
 
-def rotate_coordinate(x, y, center_x, center_y):
-    diff_x = x - center_x
-    diff_y = y - center_y
-    return center_x - diff_x, center_y - diff_y
-
 def get_harmonics_coodinates(x1, y1, x2, y2, width, height):
     coordinates = set()
     diff_x = x1 - x2
