@@ -47,6 +47,8 @@ def compact_blockmap(blockmap):
                     blockmap_copy.sort(key=lambda x: x['start_index'])
                     free_spaces = get_free_spaces(blockmap_copy)
                     break
+        if free_spaces[0]['start_index'] > blockmap[last_i]['start_index']:
+            break
     return blockmap_copy
 
 def compute_block_map_checksum(block_map):
