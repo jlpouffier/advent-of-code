@@ -64,12 +64,12 @@ with open("2024/9/input.txt", mode="r") as file:
     for line in file:
         diskmap += line
 
-part1_start_time = time.time()
+part2_start_time = time.time()
 
 block_map = generate_blockmap(diskmap)
 block_map = compact_blockmap(block_map)
 print(compute_block_map_checksum(block_map))
 
-part1_end_time = time.time()
-part1_runtime = part1_end_time - part1_start_time
-print(f"Runtime: {part1_runtime:.6f} seconds")
+part2_end_time = time.time()
+part2_runtime = part2_end_time - part2_start_time
+print(f"Runtime: {part2_runtime:.6f} seconds")
