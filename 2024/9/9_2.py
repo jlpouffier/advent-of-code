@@ -38,6 +38,7 @@ def compact_blockmap(blockmap):
         for free_space in free_spaces:
             if blockmap[last_i]['size'] <= free_space['size']:
                 if blockmap[last_i]['start_index'] >= free_space['start_index']:
+                    print(f"Free space found for block nb {last_i}: {blockmap[last_i]['start_index']} >>> {free_space['start_index']}")
                     blockmap_copy.remove(blockmap[last_i])
                     blockmap_copy.append({
                         'start_index': free_space['start_index'],
