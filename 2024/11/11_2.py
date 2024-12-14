@@ -1,42 +1,60 @@
 import time
 
+# The cache will be a dictionary of dictionary like that
+# chache[stone][iteration] = number of stones
 cache = {}
 
-def is_even_digit_number(number):
-    digit_count = len(str(number))
+def is_even_digit_stone(stone):
+    digit_count = len(str(stone))
     return digit_count % 2 == 0
 
-def split_even_number(number):
-    mid = len(str(number)) // 2
-    return int(str(number)[:mid]) , int(str(number)[mid:])
+def split_stone(stone):
+    mid = len(str(stone)) // 2
+    return int(str(stone)[:mid]) , int(str(stone)[mid:])
 
-def blink(numbers, times = 1):
-    print(len(numbers))
-    if times == 0:
-        return numbers
+# Blink a stone, only once.
+# Store all the business logic of the blink
+def blink(stone):
+    new_stones = []
+    if stone == 0:
+        new_stones.append(1)
+    elif is_even_digit_stone(stone):
+        new_stones.extend(split_stone(stone))
     else:
-        new_numbers = []
-        for number in numbers:
-            if number in cache:
-                new_numbers.extend(cache[number])
-            else:
-                if number == 0:
-                    cache[number] = [1]
-                elif is_even_digit_number(number):
-                    cache[number] = split_even_number(number)
-                else:
-                    cache[number] = [2024 * number]
-                new_numbers.extend(cache[number])
-        return blink(new_numbers, times - 1)
+        new_stones.append(2024 * stone)
+    return new_stones
 
-with open("2024/11/test.txt", mode="r") as file:
+def compute_number_stones(stone, iteration):
+    # If cached, returned cached solution
+    if stone in cache and iteration in cache[stone]:
+        return cache[stone][iteration]
+    
+    # Initialize the cache[stone] dict
+    elif stone not in cache:
+        cache[stone] = {}
+    
+    # Stop the recursion
+    if iteration == 0:
+        return 1
+
+    # Blink and recurse
+    new_stones = blink(stone)
+    nb_stones = 0
+    for sub_stone in new_stones:
+        nb_stones += compute_number_stones(sub_stone, iteration - 1)
+    cache[stone][iteration] = nb_stones
+    return nb_stones
+
+with open("2024/11/input.txt", mode="r") as file:
     for line in file:
-        numbers = [int(number) for number in line.split(' ')]
+        stones = [int(number) for number in line.split(' ')]
 
 part2_start_time = time.time()
 
-new_numbers = blink(numbers, 75)
-print(len(new_numbers))
+total_stone_nb = 0
+for stone in stones:
+    total_stone_nb += compute_number_stones(stone, 75)
+print(total_stone_nb)
 
 part2_end_time = time.time()
 part2_runtime = part2_end_time - part2_start_time
