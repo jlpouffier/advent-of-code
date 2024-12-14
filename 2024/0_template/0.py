@@ -1,13 +1,10 @@
 import time
 
-with open("2024/9/input.txt", mode="r") as file:
+with open("2024/1/test.txt", mode="r") as file:
     for line in file:
         print(line)
 
-
 part1_start_time = time.time()
-
-
 
 part1_end_time = time.time()
 part1_runtime = part1_end_time - part1_start_time
