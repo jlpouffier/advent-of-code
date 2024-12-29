@@ -49,22 +49,54 @@ class Computer:
         while not self.halt:
             self.run_instruction()
 
-    def debug(self):
-        A_coefficients = [0 for i in range(len(self.program))]
-        for i in range(len(self.program)):
-            print(f'Trying to match this program part: {self.program[-i-1:]}')
-            for j in range(8):
-                A_coefficients[len(self.program) - 1 - i] = j
-                print(A_coefficients)
-                tested_A = sum(coef * (8 ** exp) for exp, coef in enumerate(reversed(A_coefficients)))
-                print(tested_A)
-                self.reset()
-                self.A = tested_A
-                self.run_program()
-                print(self.output)
-                if self.program[-i-1:] == self.output[-i-1:]:
-                    print("MATCH!")
-                    break
+    # def debug(self):
+    #     A_coefficients = [0 for i in range(len(self.program))]
+    #     for i in range(len(self.program)):
+    #         print(f'Trying to match this program part: {self.program[-i-1:]}')
+    #         for j in range(8):
+    #             A_coefficients[len(self.program) - 1 - i] = j
+    #             print(A_coefficients)
+    #             tested_A = sum(coef * (8 ** exp) for exp, coef in enumerate(reversed(A_coefficients)))
+    #             print(tested_A)
+    #             self.reset()
+    #             self.A = tested_A
+    #             self.run_program()
+    #             print(self.output)
+    #             if self.program[-i-1:] == self.output[-i-1:]:
+    #                 print("MATCH!")
+    #                 break
+
+    def test_debug_index(self, A_coefficients, index):
+        print(A_coefficients)
+        tested_A = sum(coef * (8 ** exp) for exp, coef in enumerate(reversed(A_coefficients)))
+        self.reset()
+        self.A = tested_A
+        self.run_program()
+        return self.program[-index-1] == self.output[-index-1]
+    
+    def debug_backtrack(self, A_coefficients, index = 0):
+        
+        if index == len(A_coefficients):
+            return True
+        
+        for j in range(8):
+            A_coefficients[index] = j
+
+            if self.test_debug_index(A_coefficients, index):
+                if self.debug_backtrack(A_coefficients, index+1):
+                    return True
+        
+        A_coefficients[index] = 0
+        return False
+
+    def debug(self, index = 0):
+        A_coefficients = [0] * 16
+        if self.debug_backtrack(A_coefficients):
+            tested_A = sum(coef * (8 ** exp) for exp, coef in enumerate(reversed(A_coefficients)))
+            print("Found a solution:", tested_A)
+        else:
+            print("No solution was found.")
+            
 
     def reset(self):
         self.A = self.initial_A
@@ -145,7 +177,7 @@ C = 0
 program = [2,4,1,2,7,5,0,3,1,7,4,1,5,5,3,0]
 
 computer = Computer(A,B,C,program)
-print(computer.debug())
+computer.debug()
 
 part1_end_time = time.time()
 part1_runtime = part1_end_time - part1_start_time
